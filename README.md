@@ -15,11 +15,11 @@
 
 ### Documentation
 
-[Team Documentation](https://github.com/codingburgas/2324-space-sprint-project-solar-swap/blob/docs/Solar-Swap-team_documentation_1.docx)
+[Team Documentation](https://github.com/codingburgas/10grade-christmas-luck-nullpointers/blob/main/docs/NullPointers.docx)
 
 
 ### Presentation
-[Presentation](https://github.com/codingburgas/2324-space-sprint-project-solar-swap/blob/docs/Solar-Swap.pptx)
+[Presentation](https://github.com/codingburgas/10grade-christmas-luck-nullpointers/blob/main/docs/NullPointers.pptx)
 <br></br>
 ## 🚀 How to run <a name="install"></a>
 *The following instructions are going to show you how to set up the project*
