@@ -71,72 +71,80 @@ int main() {
         {"Penguin", "Animalia", "Spheniscidae", "Antarctica", 20, 500000}
     };
 
-    int choice;
-    do {
-        std::cout << "Species Data Management System\n";
+    int choice; // Declare the user selection variable
+    do { // Display the data types menu
+        std::cout << "Species Data Management System\n"; // Display all types
         std::cout << "1. Display all species\n";
-        std::cout << "2. Sort species\n";
+        std::cout << "2. Sort species\n"; 
         std::cout << "3. Search species\n";
         std::cout << "4. Calculate population growth\n";
         std::cout << "5. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> choice;
-
+        
+        // Perform action according to selection
         switch (choice) {
-        case 1:
+        case 1: 
+            // Display information about all types
             for (const auto& species : speciesList) {
-                species.display();
-                std::cout << "-----------------------------\n";
+                species.display(); // Outputs the data for the current view
+                std::cout << "-----------------------------\n"; // Separator between types
             }
             break;
-        case 2: {
+        case 2: { 
+            // Sort the types
             std::string criteria;
             std::cout << "Enter criteria (taxonomy/lifespan/population): ";
-            std::cin >> criteria;
-            sortSpecies(speciesList, criteria);
-            std::cout << "Species sorted by " << criteria << "!\n";
+            std::cin >> criteria; // Read the criterion
+            sortSpecies(speciesList, criteria); // Call the sort function
+            std::cout << "Species sorted by " << criteria << "!\n"; // Confirmation of successful sorting
             break;
         }
-        case 3: {
-            std::string key, value;
+        case 3: { 
+            // Search for types
+            std::string key, value; // Key and value to search for
             std::cout << "Enter search key (name/habitat/genus): ";
-            std::cin >> key;
+            std::cin >> key; // Read the key
             std::cout << "Enter search value: ";
-            std::cin >> value;
-            searchSpecies(speciesList, key, value);
+            std::cin >> value; // Read the value
+            searchSpecies(speciesList, key, value); // Call the search function
             break;
         }
         case 4: {
-            std::string speciesName;
-            double growthRate;
-            int years;
+            // Calculate population growth
+            std::string speciesName; // Type name
+            double growthRate; // Annual growth rate
+            int years; // Number of years for the calculation
             std::cout << "Enter species name: ";
-            std::cin >> speciesName;
+            std::cin >> speciesName; // Четене на името
             std::cout << "Enter annual growth rate (e.g., 0.05 for 5%): ";
-            std::cin >> growthRate;
+            std::cin >> growthRate; // Read the percentage
             std::cout << "Enter number of years: ";
-            std::cin >> years;
+            std::cin >> years; // Read the number of years
 
+            // Find the type in the list
             auto it = std::find_if(speciesList.begin(), speciesList.end(), [&speciesName](const Species& s) {
                 return s.name == speciesName;
                 });
 
-            if (it != speciesList.end()) {
+            if (it != speciesList.end()) { // Calculate the future population if the species is found
                 long futurePopulation = calculatePopulation(it->population, growthRate, years);
                 std::cout << "Population of " << speciesName << " after " << years << " years: " << futurePopulation << "\n";
             }
-            else {
+            else { // Type missing message
                 std::cout << "Species not found.\n";
             }
             break;
         }
-        case 5:
+
+        // Изход от програмата
+        case 5: 
             std::cout << "Exiting...\n";
             break;
-        default:
+        default: // Invalid selection message
             std::cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 5);
+    } while (choice != 5); // Continues the loop until the choice is 5 (Exit)
 
-    return 0;
+    return 0; // End of program
 }
