@@ -1,66 +1,8 @@
-#include <iostream>
+#include "Species.h"
+#include "Utilities.h"
 #include <vector>
-#include <string>
+#include <iostream>
 #include <algorithm>
-#include <cmath>
-
-// Struct to store species data
-struct Species {
-    std::string name;
-    std::string kingdom;
-    std::string genus;
-    std::string habitat;
-    int lifespan; // in years
-    long population;
-
-    void display() const {
-        std::cout << "Name: " << name
-            << "\nKingdom: " << kingdom
-            << "\nGenus: " << genus
-            << "\nHabitat: " << habitat
-            << "\nLifespan: " << lifespan
-            << " years\nPopulation: " << population << "\n";
-    }
-};
-
-// Helper functions for population growth (recursive calculation)
-long calculatePopulation(long initialPopulation, double growthRate, int years) {
-    if (years == 0)
-        return initialPopulation;
-    return static_cast<long>(calculatePopulation(initialPopulation, growthRate, years - 1) * (1 + growthRate));
-}
-
-// Sort species
-void sortSpecies(std::vector<Species>& speciesList, const std::string& criteria) {
-    if (criteria == "taxonomy") {
-        std::sort(speciesList.begin(), speciesList.end(), [](const Species& a, const Species& b) {
-            return a.kingdom < b.kingdom || (a.kingdom == b.kingdom && a.genus < b.genus) ||
-            (a.kingdom == b.kingdom && a.genus == b.genus && a.name < b.name);
-            });
-    }
-    else if (criteria == "lifespan") {
-        std::sort(speciesList.begin(), speciesList.end(), [](const Species& a, const Species& b) {
-            return a.lifespan > b.lifespan;
-            });
-    }
-    else if (criteria == "population") {
-        std::sort(speciesList.begin(), speciesList.end(), [](const Species& a, const Species& b) {
-            return a.population > b.population;
-            });
-    }
-}
-
-// Search species
-void searchSpecies(const std::vector<Species>& speciesList, const std::string& key, const std::string& value) {
-    for (const auto& species : speciesList) {
-        if ((key == "name" && species.name == value) ||
-            (key == "habitat" && species.habitat == value) ||
-            (key == "genus" && species.genus == value)) {
-            species.display();
-            std::cout << "-----------------------------\n";
-        }
-    }
-}
 
 int main() {
     // Sample data
@@ -71,80 +13,77 @@ int main() {
         {"Penguin", "Animalia", "Spheniscidae", "Antarctica", 20, 500000}
     };
 
-    int choice; // Declare the user selection variable
-    do { // Display the data types menu
-        std::cout << "Species Data Management System\n"; // Display all types
-        std::cout << "1. Display all species\n";
-        std::cout << "2. Sort species\n"; 
-        std::cout << "3. Search species\n";
-        std::cout << "4. Calculate population growth\n";
-        std::cout << "5. Exit\n";
+    int choice; // Variable for user selection
+    do {
+        std::cout << "Species Data Management System\n"; // Menu header
+        std::cout << "1. Display all species\n";         // Option to display all species
+        std::cout << "2. Sort species\n";                // Option to sort species
+        std::cout << "3. Search species\n";              // Option to search for species
+        std::cout << "4. Calculate population growth\n"; // Option to calculate population growth
+        std::cout << "5. Exit\n";                        // Option to exit
         std::cout << "Enter your choice: ";
         std::cin >> choice;
-        
-        // Perform action according to selection
+
         switch (choice) {
-        case 1: 
-            // Display information about all types
+        case 1:
+            // Display information about all species
             for (const auto& species : speciesList) {
-                species.display(); // Outputs the data for the current view
-                std::cout << "-----------------------------\n"; // Separator between types
+                species.display(); // Output data for each species
+                std::cout << "-----------------------------\n"; // Separator
             }
             break;
-        case 2: { 
-            // Sort the types
+        case 2: {
+            // Sort species based on criteria
             std::string criteria;
             std::cout << "Enter criteria (taxonomy/lifespan/population): ";
-            std::cin >> criteria; // Read the criterion
-            sortSpecies(speciesList, criteria); // Call the sort function
-            std::cout << "Species sorted by " << criteria << "!\n"; // Confirmation of successful sorting
+            std::cin >> criteria; // Read sorting criteria
+            sortSpecies(speciesList, criteria); // Sort the species
+            std::cout << "Species sorted by " << criteria << "!\n"; // Confirmation message
             break;
         }
-        case 3: { 
-            // Search for types
-            std::string key, value; // Key and value to search for
+        case 3: {
+            // Search for a species
+            std::string key, value; // Key and value for searching
             std::cout << "Enter search key (name/habitat/genus): ";
-            std::cin >> key; // Read the key
+            std::cin >> key; // Read search key
             std::cout << "Enter search value: ";
-            std::cin >> value; // Read the value
-            searchSpecies(speciesList, key, value); // Call the search function
+            std::cin >> value; // Read search value
+            searchSpecies(speciesList, key, value); // Perform the search
             break;
         }
         case 4: {
             // Calculate population growth
-            std::string speciesName; // Type name
-            double growthRate; // Annual growth rate
-            int years; // Number of years for the calculation
+            std::string speciesName; // Species name for population calculation
+            double growthRate;       // Annual growth rate
+            int years;               // Number of years to calculate for
             std::cout << "Enter species name: ";
-            std::cin >> speciesName; // Четене на името
+            std::cin >> speciesName; // Read the species name
             std::cout << "Enter annual growth rate (e.g., 0.05 for 5%): ";
-            std::cin >> growthRate; // Read the percentage
+            std::cin >> growthRate; // Read the growth rate
             std::cout << "Enter number of years: ";
             std::cin >> years; // Read the number of years
 
-            // Find the type in the list
+            // Find the species in the list
             auto it = std::find_if(speciesList.begin(), speciesList.end(), [&speciesName](const Species& s) {
                 return s.name == speciesName;
                 });
 
-            if (it != speciesList.end()) { // Calculate the future population if the species is found
+            if (it != speciesList.end()) { // Calculate future population if species is found
                 long futurePopulation = calculatePopulation(it->population, growthRate, years);
                 std::cout << "Population of " << speciesName << " after " << years << " years: " << futurePopulation << "\n";
             }
-            else { // Type missing message
+            else { // Species not found message
                 std::cout << "Species not found.\n";
             }
             break;
         }
-
-        // Изход от програмата
-        case 5: 
-            std::cout << "Exiting...\n";
+        case 5:
+            std::cout << "Exiting...\n"; // Exit message
             break;
-        default: // Invalid selection message
-            std::cout << "Invalid choice. Try again.\n";
+        default:
+            std::cout << "Invalid choice. Try again.\n"; // Invalid choice message
         }
-    } while (choice != 5); // Continues the loop until the choice is 5 (Exit)
+    } while (choice != 5); // Loop until user chooses to exit
 
-    return 0; // End of program
+    return 0;
 }
